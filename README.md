@@ -10,7 +10,7 @@ Checkout our tutorials:
 
 1. [Lynxius to evaluate LLM Summarization and Custom Metrics](./tutorials/AI_medical_scribe_with_UI.ipynb)
 2. Lynxius to evaluate LLM RAG applications
-3. Lynxius to boost collaboration with Subject Matter Experts
+3. [Lynxius to boost collaboration with Subject Matter Experts](./tutorials/Datasets.ipynb)
 
 ## Setup
 
