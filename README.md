@@ -11,3 +11,15 @@ Checkout our tutorials:
 1. [Lynxius to evaluate LLM Summarization and Custom Metrics](./tutorials/AI_medical_scribe_with_UI.ipynb)
 2. Lynxius to evaluate LLM RAG applications
 3. Lynxius to boost collaboration with Subject Matter Experts
+
+## Setup
+
+### Create a Development Environment
+
+For local development, start by installing python `3.12.1`, creating a virtual environment and installing the dependencies:
+
+```bash
+python3.12 -m venv .lynxius-python
+source .lynxius-python/bin/activate
+pip install -r requirements.txt
+```

@@ -127,6 +127,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.lynxius-python
 
 # Spyder project settings
 .spyderproject
