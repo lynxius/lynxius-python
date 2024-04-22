@@ -5,7 +5,9 @@ Lynxius Web App offers advanced AI observability features, security, scalability
 :warning::warning::warning: If you've landed on this page, you're likely participating in our closed beta program for [Lynxius](https://www.lynxius.ai/) and are already aware that this page serves as a placeholder. We are on the brink of officially launching our platform along with detailed documentation. In the meantime, here are a few code examples. :warning::warning::warning:
 
 ## Lynxius Platform in 3 Minutes
-<video src="https://github-public-assets.s3.us-west-1.amazonaws.com/Lynxius+Demo.mp4" width="320" height="240" controls></video>
+[![Video Thumbnail](https://github-public-assets.s3.us-west-1.amazonaws.com/chatdoctorv2_datasetv2labeled.png)](https://github-public-assets.s3.us-west-1.amazonaws.com/Lynxius+Demo.mp4)
+
+
 
 ## Code Examples
 
