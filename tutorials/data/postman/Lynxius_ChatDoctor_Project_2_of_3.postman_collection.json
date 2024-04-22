@@ -1,0 +1,489 @@
+{
+	"info": {
+		"_postman_id": "d6818333-8ef8-45ba-89f6-557124ec05b6",
+		"name": "Lynxius ChatDoctor Project (2/3)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8227095"
+	},
+	"item": [
+		{
+			"name": "Create Dataset v2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"project_uuid\": \"{{project_uuid}}\",\n  \"name\": \"Dataset v2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Dataset (bug: UUID not returned)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseData = pm.response.json();",
+							"var projects = responseData.owner_of;",
+							"var targetProjectName = \"Dataset v2\";",
+							"",
+							"// Loop through each project in the owner_of array",
+							"var projectUUID = projects.find(project => project.name === targetProjectName).uuid;",
+							"",
+							"// Set the project UUID as an environment variable",
+							"pm.environment.set('dataset_uuid', projectUUID);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"How can I prevent the flu?\",\n  \"reference\": \"The best way to prevent the flu is by getting an annual flu vaccine. Additionally, practicing good hand hygiene, avoiding close contact with sick individuals, and staying home when you're sick can help prevent the spread of the flu virus.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"What are the early signs of diabetes?\",\n  \"reference\": \"Early signs of diabetes include increased thirst, frequent urination, unexplained weight loss, fatigue, blurred vision, and slow-healing sores or infections.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"How do I know if I have a food allergy?\",\n  \"reference\": \"If you suspect you have a food allergy, pay attention to indicators such as hives, itching or eczema, swelling of the lips, tongue, or throat, nausea or vomiting, diarrhea, or difficulty breathing shortly after consuming certain foods. It's important to see a doctor for proper diagnosis and treatment.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"What should I do if I get a sunburn?\",\n  \"reference\": \"If you get a sunburn, you should cool the skin with a cold compress or cool bath, apply moisturizer or aloe vera gel to soothe the skin, drink plenty of water to stay hydrated, and avoid further sun exposure until the burn heals.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"What are the symptoms of a migraine headache?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-6",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"What are the symptoms of the common cold?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add DB Entry-7",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "{{csrftoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"What are the symptoms of a urinary tract infection (UTI)?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/datasets/{{dataset_uuid}}/entries/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"datasets",
+						"{{dataset_uuid}}",
+						"entries",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
