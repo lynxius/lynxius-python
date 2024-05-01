@@ -89,7 +89,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"ChatDoctor v_0001\"\n}",
+					"raw": "{\n  \"name\": \"ChatDoctor\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -172,7 +172,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"var responseData = pm.response.json();",
+							"postman.setEnvironmentVariable('dataset_uuid', responseData.uuid);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -196,63 +197,6 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"project_uuid\": \"{{project_uuid}}\",\n  \"name\": \"Dataset v1\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/api/datasets/",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"api",
-						"datasets",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Dataset (bug: UUID not returned)",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var responseData = pm.response.json();",
-							"var projects = responseData.owner_of;",
-							"var targetProjectName = \"Dataset v1\";",
-							"",
-							"// Loop through each project in the owner_of array",
-							"var projectUUID = projects.find(project => project.name === targetProjectName).uuid;",
-							"",
-							"// Set the project UUID as an environment variable",
-							"pm.environment.set('dataset_uuid', projectUUID);"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
