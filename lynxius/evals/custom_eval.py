@@ -1,5 +1,6 @@
 from string import Formatter
 from lynxius.evals.evaluator import Evaluator
+from lynxius.rag.types import ContextChunk
 
 
 class CustomEval(Evaluator):
@@ -11,7 +12,7 @@ class CustomEval(Evaluator):
             fname for _, fname, _, _ in Formatter().parse(prompt_template) if fname
         ]
 
-    def add_trace(self, values: dict[str, str]):
+    def add_trace(self, values: dict[str, str], context: list[ContextChunk] = []):
 
         # Ensure that all variables in the template are provided
         for var_name in self.variables:
@@ -26,7 +27,7 @@ class CustomEval(Evaluator):
                     f"Variable '{var_name}' doesn't appear in the template."
                 )
 
-        self.samples.append(values)
+        self.samples.append((values, context))
 
     def get_url(self):
         return "/api/evals/run/custom_eval/"
@@ -35,7 +36,10 @@ class CustomEval(Evaluator):
         body = {
             "title": self.title,
             "prompt_template": self.prompt_template,
-            "data": [item for item in self.samples],
+            "data": [
+                {"variables": item[0], "contexts": [c.__dict__ for c in item[1]]}
+                for item in self.samples
+            ],
         }
 
         return body
