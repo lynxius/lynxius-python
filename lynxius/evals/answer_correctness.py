@@ -1,4 +1,5 @@
 from lynxius.evals.evaluator import Evaluator
+from lynxius.rag.types import ContextChunk
 
 
 class AnswerCorrectness(Evaluator):
@@ -6,11 +7,13 @@ class AnswerCorrectness(Evaluator):
         self.title = title
         self.samples = []
 
-    def add_trace(self, query: str, reference: str, output: str):
+    def add_trace(
+        self, query: str, reference: str, output: str, context: list[ContextChunk] = []
+    ):
         if not query or not reference or not output:
             raise ValueError("Query, reference and output must all be provided")
 
-        self.samples.append((query, reference, output))
+        self.samples.append((query, reference, output, context))
 
     def get_url(self):
         return "/api/evals/run/answer_correctness/"
@@ -19,7 +22,12 @@ class AnswerCorrectness(Evaluator):
         body = {
             "title": self.title,
             "data": [
-                {"query": item[0], "reference": item[1], "output": item[2]}
+                {
+                    "query": item[0],
+                    "reference": item[1],
+                    "output": item[2],
+                    "contexts": [c.__dict__ for c in item[3]],
+                }
                 for item in self.samples
             ],
         }

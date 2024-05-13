@@ -1,4 +1,5 @@
 from lynxius.evals.evaluator import Evaluator
+from lynxius.rag.types import ContextChunk
 
 
 class BertScore(Evaluator):
@@ -14,11 +15,11 @@ class BertScore(Evaluator):
         self.presence_threshold = presence_threshold
         self.samples = []
 
-    def add_trace(self, reference: str, output: str):
+    def add_trace(self, reference: str, output: str, context: list[ContextChunk] = []):
         if not reference or not output:
             raise ValueError("Both reference and output must be provided")
 
-        self.samples.append((reference, output))
+        self.samples.append((reference, output, context))
 
     def get_url(self):
         return "/api/evals/run/bert_score/"
@@ -29,7 +30,12 @@ class BertScore(Evaluator):
             "level": self.level,
             "presence_threshold": self.presence_threshold,
             "data": [
-                {"reference": item[0], "output": item[1]} for item in self.samples
+                {
+                    "reference": item[0],
+                    "output": item[1],
+                    "contexts": [c.__dict__ for c in item[2]],
+                }
+                for item in self.samples
             ],
         }
 
