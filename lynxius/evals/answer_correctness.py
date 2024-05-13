@@ -19,7 +19,7 @@ class AnswerCorrectness(Evaluator):
         body = {
             "title": self.title,
             "data": [
-                {"query": item[0], "reference": item[1], "output": item[2]}
+                {"query": item[0], "reference": item[1], "output": item[2], "contexts": []}
                 for item in self.samples
             ],
         }

@@ -29,7 +29,7 @@ class BertScore(Evaluator):
             "level": self.level,
             "presence_threshold": self.presence_threshold,
             "data": [
-                {"reference": item[0], "output": item[1]} for item in self.samples
+                {"reference": item[0], "output": item[1], "contexts": []} for item in self.samples
             ],
         }
 

@@ -26,6 +26,7 @@ class CustomEval(Evaluator):
                     f"Variable '{var_name}' doesn't appear in the template."
                 )
 
+        values["contexts"]=[]
         self.samples.append(values)
 
     def get_url(self):
