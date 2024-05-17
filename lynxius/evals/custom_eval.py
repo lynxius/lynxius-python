@@ -4,8 +4,12 @@ from lynxius.rag.types import ContextChunk
 
 
 class CustomEval(Evaluator):
-    def __init__(self, title: str, prompt_template: str):
-        self.title = title
+    def __init__(self, label: str, prompt_template: str, href: str = "", tags: list[str] = None):
+        [Evaluator.validate_tag(value) for value in tags]
+
+        self.label = label
+        self.href = href
+        self.tags = tags
         self.prompt_template = prompt_template
         self.samples = []
         self.variables = [
@@ -34,7 +38,9 @@ class CustomEval(Evaluator):
 
     def get_request_body(self):
         body = {
-            "title": self.title,
+            "label": self.label,
+            "href": self.href,
+            "tags": self.tags,
             "prompt_template": self.prompt_template,
             "data": [
                 {"variables": item[0], "contexts": [c.__dict__ for c in item[1]]}
