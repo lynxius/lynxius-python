@@ -4,13 +4,17 @@ from lynxius.rag.types import ContextChunk
 
 class BertScore(Evaluator):
     def __init__(
-        self, title: str, level: str = "word", presence_threshold: float = 0.65
+        self, label: str, level: str = "word", presence_threshold: float = 0.65, href: str = None, tags: list[str] = None
     ):
         levels = ["word", "sentence"]
         if level not in levels:
             raise ValueError(f"Level must be one of the following: {levels}")
 
-        self.title = title
+        [Evaluator.validate_tag(value) for value in tags]
+
+        self.label = label
+        self.href = href
+        self.tags = tags
         self.level = level
         self.presence_threshold = presence_threshold
         self.samples = []
@@ -26,7 +30,9 @@ class BertScore(Evaluator):
 
     def get_request_body(self):
         body = {
-            "title": self.title,
+            "label": self.label,
+            "href": self.href,
+            "tags": self.tags,
             "level": self.level,
             "presence_threshold": self.presence_threshold,
             "data": [

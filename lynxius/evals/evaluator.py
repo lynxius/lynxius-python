@@ -13,3 +13,7 @@ class Evaluator(ABC):
     @abstractmethod
     def get_request_body(self):
         return NotImplemented
+
+    def validate_tag(value):
+        if "," in value or " " in value:
+            raise ValueError(f"Tags can't contain spaces or commas: {value}")

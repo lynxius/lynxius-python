@@ -3,8 +3,12 @@ from lynxius.rag.types import ContextChunk
 
 
 class ContextPrecision(Evaluator):
-    def __init__(self, title: str):
-        self.title = title
+    def __init__(self, label: str, href: str = None, tags: list[str] = None):
+        [Evaluator.validate_tag(value) for value in tags]
+
+        self.label = label
+        self.href = href
+        self.tags = tags
         self.samples = []
 
     def add_trace(self, query: str, reference: str, context: list[ContextChunk] = []):
@@ -18,7 +22,9 @@ class ContextPrecision(Evaluator):
 
     def get_request_body(self):
         body = {
-            "title": self.title,
+            "label": self.label,
+            "href": self.href,
+            "tags": self.tags,
             "data": [
                 {
                     "query": item[0],
