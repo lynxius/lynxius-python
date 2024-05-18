@@ -4,7 +4,7 @@ from lynxius.rag.types import ContextChunk
 
 class BertScore(Evaluator):
     def __init__(
-        self, label: str, level: str = "word", presence_threshold: float = 0.65, href: str = "", tags: list[str] = None
+        self, label: str, level: str = "word", presence_threshold: float = 0.65, href: str = None, tags: list[str] = None
     ):
         levels = ["word", "sentence"]
         if level not in levels:
