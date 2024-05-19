@@ -7,7 +7,7 @@ class SemanticSimilarity(Evaluator):
         [Evaluator.validate_tag(value) for value in tags]
 
         self.label = label
-        self.href: href
+        self.href = href
         self.tags = tags
         self.samples = []
 
