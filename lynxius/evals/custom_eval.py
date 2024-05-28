@@ -4,7 +4,9 @@ from lynxius.rag.types import ContextChunk
 
 
 class CustomEval(Evaluator):
-    def __init__(self, label: str, prompt_template: str, href: str = None, tags: list[str] = None):
+    def __init__(
+        self, label: str, prompt_template: str, href: str = None, tags: list[str] = []
+    ):
         [Evaluator.validate_tag(value) for value in tags]
 
         self.label = label
