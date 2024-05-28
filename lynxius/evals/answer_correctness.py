@@ -20,7 +20,7 @@ class AnswerCorrectness(Evaluator):
         self.samples.append((query, reference, output, context))
 
     def get_url(self):
-        return "/api/evals/run/answer_correctness/"
+        return "/evals/run/answer_correctness/"
 
     def get_request_body(self):
         body = {

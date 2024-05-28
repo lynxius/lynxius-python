@@ -18,7 +18,7 @@ class ContextPrecision(Evaluator):
         self.samples.append((query, reference, context))
 
     def get_url(self):
-        return "/api/evals/run/context_precision_eval/"
+        return "/evals/run/context_precision_eval/"
 
     def get_request_body(self):
         body = {
