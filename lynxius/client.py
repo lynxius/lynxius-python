@@ -69,8 +69,8 @@ class LynxiusClient:
         dataset_details.dataset = Dataset(
             body["dataset"]["uuid"],
             body["dataset"]["date_created"],
-            body["dataset"]["project_uuid"],
-            body["dataset"]["project_name"],
+            body["dataset"]["organization_uuid"],
+            body["dataset"]["organization_name"],
         )
 
         dataset_details.entries = []
