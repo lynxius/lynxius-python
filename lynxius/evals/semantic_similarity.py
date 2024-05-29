@@ -18,7 +18,7 @@ class SemanticSimilarity(Evaluator):
         self.samples.append((reference, output, context))
 
     def get_url(self):
-        return "/api/evals/run/semantic_similarity/"
+        return "/evals/run/semantic_similarity/"
 
     def get_request_body(self):
         body = {

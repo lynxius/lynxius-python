@@ -36,7 +36,7 @@ class CustomEval(Evaluator):
         self.samples.append((values, context))
 
     def get_url(self):
-        return "/api/evals/run/custom_eval/"
+        return "/evals/run/custom_eval/"
 
     def get_request_body(self):
         body = {

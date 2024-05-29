@@ -31,7 +31,7 @@ class BertScore(Evaluator):
         self.samples.append((reference, output, context))
 
     def get_url(self):
-        return "/api/evals/run/bert_score/"
+        return "/evals/run/bert_score/"
 
     def get_request_body(self):
         body = {
