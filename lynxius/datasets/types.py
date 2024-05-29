@@ -6,8 +6,8 @@ from typing import List
 class Dataset:
     uuid: str
     date_created: str
-    project_uuid: str
-    project_name: str
+    organization_uuid: str
+    organization_name: str
 
 
 @dataclass

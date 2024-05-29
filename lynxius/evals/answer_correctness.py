@@ -3,7 +3,7 @@ from lynxius.rag.types import ContextChunk
 
 
 class AnswerCorrectness(Evaluator):
-    def __init__(self, label: str, href: str = None, tags: list[str] = None):
+    def __init__(self, label: str, href: str = None, tags: list[str] = []):
         [Evaluator.validate_tag(value) for value in tags]
 
         self.label = label
@@ -20,7 +20,7 @@ class AnswerCorrectness(Evaluator):
         self.samples.append((query, reference, output, context))
 
     def get_url(self):
-        return "/api/evals/run/answer_correctness/"
+        return "/evals/run/answer_correctness/"
 
     def get_request_body(self):
         body = {

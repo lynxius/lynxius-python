@@ -1,6 +1,7 @@
 """Main module."""
 
 import os
+from urllib.parse import urljoin
 
 import httpx
 
@@ -9,6 +10,8 @@ from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
 
 
 class LynxiusClient:
+    LYNXIUS_API_VERSION = "v1"
+
     _client: httpx.Client
 
     # client options
@@ -38,7 +41,11 @@ class LynxiusClient:
             base_url = os.environ.get("LYNXIUS_BASE_URL")
         if base_url is None:
             # TODO: substitute production URL here
-            base_url = "https://api.lynxius.ai/v1"
+            base_url = "https://api.lynxius.ai/"
+
+        base_url = urljoin(base_url, "api/")
+        base_url = urljoin(base_url, self.LYNXIUS_API_VERSION)
+        # Now, base_url looks similar to this: https://lynxius.ai/api/v1"
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
 
@@ -62,15 +69,15 @@ class LynxiusClient:
             return None
 
     def get_dataset_details(self, dataset_id: str) -> DatasetDetails:
-        response = self._client.get(f"/api/datasets/{dataset_id}/entries/")
+        response = self._client.get(f"/datasets/{dataset_id}/entries/")
         body = response.json()
 
         dataset_details = DatasetDetails()
         dataset_details.dataset = Dataset(
             body["dataset"]["uuid"],
             body["dataset"]["date_created"],
-            body["dataset"]["project_uuid"],
-            body["dataset"]["project_name"],
+            body["dataset"]["organization_uuid"],
+            body["dataset"]["organization_name"],
         )
 
         dataset_details.entries = []

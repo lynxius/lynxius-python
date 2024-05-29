@@ -3,7 +3,7 @@ from lynxius.rag.types import ContextChunk
 
 
 class ContextPrecision(Evaluator):
-    def __init__(self, label: str, href: str = None, tags: list[str] = None):
+    def __init__(self, label: str, href: str = None, tags: list[str] = []):
         [Evaluator.validate_tag(value) for value in tags]
 
         self.label = label
@@ -18,7 +18,7 @@ class ContextPrecision(Evaluator):
         self.samples.append((query, reference, context))
 
     def get_url(self):
-        return "/api/evals/run/context_precision_eval/"
+        return "/evals/run/context_precision_eval/"
 
     def get_request_body(self):
         body = {
