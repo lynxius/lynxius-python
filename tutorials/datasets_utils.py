@@ -104,3 +104,19 @@ def chatdoctor_v2(query: str) -> str:
         return data[query]
     else:
         return "I don't know"
+
+
+def chat_pizza(query: str) -> str:
+
+    data = {
+        "What is pizza quattro stagioni? Keep it short.": "Pizza Quattro Stagioni is an Italian pizza that represents the four seasons through its toppings, divided into four sections. Each section features ingredients typical of a particular season, like artichokes for spring, peppers for summer, mushrooms for autumn, and olives or prosciutto for winter.",
+        "What is the first tomato-topped pizza? Keep it short.": "The first tomato-topped pizza is the Margherita, created in 1889 in Naples, Italy.",
+        "Which tomato sauce is used in neapolitan pizza? Keep it short.": "San Marzano tomatoes are traditionally used in Neapolitan pizza sauce.",
+        "When did pizza arrive in the United States? Keep it short.": "Pizza arrived in the United States in late 19th century, brought by Italian immigrants.",
+        "What is the main pizza ingredient in one word?": "Cheese",
+    }
+
+    if query in data:
+        return data[query]
+    else:
+        return "I don't know"
