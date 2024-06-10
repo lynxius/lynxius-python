@@ -5,7 +5,12 @@ from lynxius.rag.types import ContextChunk
 
 class CustomEval(Evaluator):
     def __init__(
-        self, label: str, prompt_template: str, href: str = None, tags: list[str] = []
+        self,
+        label: str,
+        prompt_template: str,
+        name: str = None,
+        href: str = None,
+        tags: list[str] = [],
     ):
         [Evaluator.validate_tag(value) for value in tags]
 
@@ -13,6 +18,7 @@ class CustomEval(Evaluator):
         self.href = href
         self.tags = tags
         self.prompt_template = prompt_template
+        self.name_override = name
         self.samples = []
         self.variables = [
             fname for _, fname, _, _ in Formatter().parse(prompt_template) if fname
@@ -44,6 +50,7 @@ class CustomEval(Evaluator):
             "href": self.href,
             "tags": self.tags,
             "prompt_template": self.prompt_template,
+            "name_override": self.name_override,
             "data": [
                 {"variables": item[0], "contexts": [c.__dict__ for c in item[1]]}
                 for item in self.samples
