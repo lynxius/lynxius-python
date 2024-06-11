@@ -1,11 +1,16 @@
-# lynxius-python client
+# Lynxius Python API Library
+
+[![PyPI version](https://img.shields.io/pypi/v/lynxius.svg)](https://pypi.org/project/lynxius/)
+
 [Lynxius](https://www.lynxius.ai/) speeds up LLM evaluation and prevents errors before they reach users.
 
 [Lynxius Platform](https://platform.lynxius.ai/) offers advanced AI observability features, security, scalability, integrations with existing ecosystems and easy collaboration across teams.
 
+The Lynxius Python library provides convenient access to the Lynxius REST API. The library includes type definitions for all request params and response fields, and offers synchronous clients powered by [httpx](https://github.com/encode/httpx).
+
 ## Docs
 
-Start your LLM evaluation journey by consulting our [official documentation](https://docs.lynxius.ai/).
+Start your LLM evaluation journey by consulting our official documentation at [docs.lynxius.ai](https://docs.lynxius.ai/).
 
 ## Lynxius Platform in 3 Minutes
 
