@@ -40,7 +40,7 @@ class LynxiusClient:
         if base_url is None:
             base_url = os.environ.get("LYNXIUS_BASE_URL")
         if base_url is None:
-            base_url = "https://platform.lynxius.ai/"
+            base_url = "https://platform.lynxius.ai"
 
         base_url = urljoin(base_url, "api/")
         base_url = urljoin(base_url, self.LYNXIUS_API_VERSION)
