@@ -40,19 +40,16 @@ class LynxiusClient:
         if base_url is None:
             base_url = os.environ.get("LYNXIUS_BASE_URL")
         if base_url is None:
-            # TODO: substitute production URL here
-            base_url = "https://api.lynxius.ai/"
+            base_url = "https://platform.lynxius.ai/"
 
         base_url = urljoin(base_url, "api/")
         base_url = urljoin(base_url, self.LYNXIUS_API_VERSION)
-        # Now, base_url looks similar to this: https://lynxius.ai/api/v1"
+        # Now, base_url looks similar to this: https://platform.lynxius.ai/api/v1"
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
 
         self._client = httpx.Client(
-            base_url=base_url,
-            headers=headers,
-            follow_redirects=True,
+            base_url=base_url, headers=headers, follow_redirects=True
         )
 
     def evaluate(self, eval: Evaluator) -> str | None:
