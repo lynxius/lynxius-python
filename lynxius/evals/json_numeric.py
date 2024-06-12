@@ -2,7 +2,7 @@ from lynxius.evals.evaluator import Evaluator
 from lynxius.rag.types import ContextChunk
 
 
-class JsonNumeric(Evaluator):
+class JsonDiff(Evaluator):
     def __init__(self, label: str, href: str = None, tags: list[str] = []):
         [Evaluator.validate_tag(value) for value in tags]
 
@@ -42,7 +42,7 @@ class JsonNumeric(Evaluator):
         self.samples.append((reference, output, weights, context))
 
     def get_url(self):
-        return "/evals/run/json_numeric_eval/"
+        return "/evals/run/json_diff_eval/"
 
     def get_request_body(self):
         body = {
