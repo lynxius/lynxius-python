@@ -23,21 +23,21 @@ class JsonDiff(Evaluator):
 
         if weights is not None:
 
-            def traverse(obj):
-                if isinstance(obj, dict):
-                    for item in obj.values():
-                        traverse(item)
-                elif (
-                    isinstance(obj, list)
-                    or isinstance(obj, str)
-                    or isinstance(obj, bool)
-                ):
-                    raise ValueError("Weights object can contain only floats or ints")
-                elif isinstance(obj, float) or isinstance(obj, int):
-                    if obj < 0 or obj > 1:
-                        raise ValueError("Weights should be in the range of [0.0, 1.0]")
+            def sum_dict(d):
+                total = 0
+                if isinstance(d, list) or isinstance(d, str) or isinstance(d, bool):
+                    raise ValueError(f"Weights object can contain only floats or ints, not: {d}")
+                elif isinstance(d, (int, float)):
+                    total += d
+                elif isinstance(d, dict):
+                    for key, value in d.items():
+                        parent_sum = sum_dict(value)
+                        total += sum_dict(value)
+                        if not (0.0 <= parent_sum <= 1.0):
+                            raise ValueError(f'The sum of the weights within key "{key}" is not within [0.0, 1.0], but is: {parent_sum}')
+                return total
 
-            traverse(weights)
+            sum_dict(weights)
 
         self.samples.append((reference, output, weights, context))
 
