@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 import httpx
 
 from lynxius.evals.evaluator import Evaluator
+from lynxius.evals.local.evaluator_local import EvaluatorLocal
 from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
 
 
@@ -58,6 +59,29 @@ class LynxiusClient:
         """
         Initiates a batched evaluation job. Returns an eval run ID.
         """
+
+        if isinstance(eval, EvaluatorLocal):
+            raise ValueError(
+                "You're passing a locally executed evaluator. Please use a"
+                " corresponding evaluator."
+            )
+
+        response = self._client.post(eval.get_url(), json=eval.get_request_body())
+
+        if response.status_code == httpx.codes.CREATED:
+            return response.json()["uuid"]
+        else:
+            print("Error:", response.status_code, response.text)
+            return None
+
+    def store(self, eval: EvaluatorLocal) -> str | None:
+        """
+        Stores the locally executed evaluator on the Lynxius platform.
+        Returns an eval run ID.
+        """
+
+        if not isinstance(eval, EvaluatorLocal):
+            raise ValueError("Only locally executed evaluators are supported")
 
         response = self._client.post(eval.get_url(), json=eval.get_request_body())
 
