@@ -26,7 +26,9 @@ class JsonDiff(Evaluator):
             def sum_dict(d):
                 total = 0
                 if isinstance(d, list) or isinstance(d, str) or isinstance(d, bool):
-                    raise ValueError(f"Weights object can contain only floats or ints, not: {d}")
+                    raise ValueError(
+                        f"Weights object can contain only floats or ints," f"not: {d}"
+                    )
                 elif isinstance(d, (int, float)):
                     total += d
                 elif isinstance(d, dict):
@@ -34,7 +36,10 @@ class JsonDiff(Evaluator):
                         parent_sum = sum_dict(value)
                         total += sum_dict(value)
                         if not (0.0 <= parent_sum <= 1.0):
-                            raise ValueError(f'The sum of the weights within key "{key}" is not within [0.0, 1.0], but is: {parent_sum}')
+                            raise ValueError(
+                                f"The sum of the weights within key '{key}' is not"
+                                f" within [0.0, 1.0], but is: {parent_sum}"
+                            )
                 return total
 
             sum_dict(weights)
