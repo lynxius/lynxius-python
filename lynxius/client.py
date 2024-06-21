@@ -62,8 +62,8 @@ class LynxiusClient:
 
         if isinstance(eval, EvaluatorLocal):
             raise ValueError(
-                "You're passing a locally executed evaluator. Please use a"
-                " corresponding evaluator."
+                "You are trying to run a remote evaluation with a locally executed "
+                "evaluator. Please use a corresponding remote evaluator class."
             )
 
         response = self._client.post(eval.get_url(), json=eval.get_request_body())
@@ -81,7 +81,10 @@ class LynxiusClient:
         """
 
         if not isinstance(eval, EvaluatorLocal):
-            raise ValueError("Only locally executed evaluators are supported")
+            raise ValueError(
+                "You are trying to store an evaluator that is not locally executed. "
+                "Please use a corresponding local evaluator class."
+            )
 
         response = self._client.post(eval.get_url(), json=eval.get_request_body())
 
@@ -92,7 +95,9 @@ class LynxiusClient:
             return None
 
     def get_dataset_details(self, dataset_id: str) -> DatasetDetails:
-        response = self._client.get(f"/datasets/{dataset_id}/entries/")
+        response = self._client.get(
+            f"/datasets/{dataset_id}/entries/"
+        ).raise_for_status()
         body = response.json()
 
         dataset_details = DatasetDetails()
