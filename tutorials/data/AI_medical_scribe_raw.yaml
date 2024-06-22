@@ -1,0 +1,35 @@
+conversation:
+  - speaker: Patient
+    sentence: "Good morning, Doctor."
+  - speaker: Doctor
+    sentence: "Good morning! How can I help you today?"
+  - speaker: Patient
+    sentence: "Well, I've been having some chest pain. It's been quite bothersome."
+  - speaker: Doctor
+    sentence: "I see, that sounds concerning. When did this pain first begin?"
+  - speaker: Patient
+    sentence: "It actually started last night. I thought it might go away, but it's gotten worse over time."
+  - speaker: Doctor
+    sentence: "I'm sorry to hear that. Does the pain spread anywhere else, like your arm or jaw perhaps?"
+  - speaker: Patient
+    sentence: "Yes, exactly. It seems to radiate down to my left arm sometimes."
+  - speaker: Doctor
+    sentence: "That's an important detail, thank you. Besides the pain, have you noticed any other symptoms? It could be shortness of breath, feeling dizzy, or perhaps breaking out in a sweat?"
+  - speaker: Patient
+    sentence: "Now that you mention it, I have been feeling a bit short of breath. But no, no dizziness or sweating."
+  - speaker: Doctor
+    sentence: "Alright. It's crucial for us to get a complete picture of what's happening. We'll need to run some tests to get to the bottom of this, especially to rule out any heart-related issues."
+  - speaker: Patient
+    sentence: "I was worried it might be something serious..."
+  - speaker: Doctor
+    sentence: "It's always better to be cautious with these symptoms. We're going to take good care of you."
+  - speaker: Doctor
+    sentence: "To start, I'm going to prescribe Novasc for the chest pain, to be taken over the next three days. It should help manage the symptoms."
+  - speaker: Patient
+    sentence: "Okay, got it. And what about the tests?"
+  - speaker: Doctor
+    sentence: "We'll also keep you here for a bit for observation. We're planning to do an X-ray and an ECG to check your heart and lungs more closely. This will help us understand what's causing your chest pain."
+  - speaker: Patient
+    sentence: "Thank you, Doctor. I just want to feel better soon."
+  - speaker: Doctor
+    sentence: "Of course, that's our goal too. We'll do everything we can to get you there."
