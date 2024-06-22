@@ -24,7 +24,7 @@ Watch our 3-minute demo video to understand the key concepts of LLM evaluation.
 
 Explore our tutorials:
 
-1. [Lynxius to evaluate LLM Summarization and Custom Metrics](./tutorials/AI_medical_scribe_with_UI.ipynb)
+1. [Lynxius to evaluate LLM Summarization and Custom Metrics](./tutorials/AI_medical_scribe.ipynb)
 2. [Lynxius to evaluate LLM chatbot applications](./tutorials/ChatDoctor.ipynb)
 3. [Lynxius to boost collaboration with Subject Matter Experts](./tutorials/Datasets.ipynb)
 4. [Run evaluations locally with your own model API key](./tutorials/eval_locally.ipynb)
