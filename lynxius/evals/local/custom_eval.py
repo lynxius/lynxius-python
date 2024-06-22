@@ -18,7 +18,7 @@ class CustomEvalLocal(CustomEval, EvaluatorLocal):
 
         self.evaluated_results = None
 
-    def evaluate(self):
+    def evaluate_local(self):
         model = OpenAIModel()
         template = EvalPromptTemplate("CustomEval", self.prompt_template)
         eval = LLMBasedEval(

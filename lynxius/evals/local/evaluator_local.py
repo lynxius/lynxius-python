@@ -8,5 +8,5 @@ class EvaluatorLocal(Evaluator):
     """
 
     @abstractmethod
-    def evaluate(self):
+    def evaluate_local(self):
         return NotImplemented

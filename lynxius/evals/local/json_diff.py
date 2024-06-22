@@ -9,7 +9,7 @@ class JsonDiffLocal(JsonDiff, EvaluatorLocal):
 
         self.evaluated_results = None
 
-    def evaluate(self):
+    def evaluate_local(self):
         eval = JsonDiffEval()
 
         variables = []

@@ -10,7 +10,7 @@ class SemanticSimilarityLocal(SemanticSimilarity, EvaluatorLocal):
 
         self.evaluated_results = None
 
-    def evaluate(self):
+    def evaluate_local(self):
         model = OpenAIModel()
         eval = SemanticSimilarityEval(model)
 

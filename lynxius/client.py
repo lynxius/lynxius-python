@@ -60,31 +60,9 @@ class LynxiusClient:
         Initiates a batched evaluation job. Returns an eval run ID.
         """
 
+        # Local evaluation
         if isinstance(eval, EvaluatorLocal):
-            raise ValueError(
-                "You are trying to run a remote evaluation with a locally executed "
-                "evaluator. Please use a corresponding remote evaluator class."
-            )
-
-        response = self._client.post(eval.get_url(), json=eval.get_request_body())
-
-        if response.status_code == httpx.codes.CREATED:
-            return response.json()["uuid"]
-        else:
-            print("Error:", response.status_code, response.text)
-            return None
-
-    def store(self, eval: EvaluatorLocal) -> str | None:
-        """
-        Stores the locally executed evaluator on the Lynxius platform.
-        Returns an eval run ID.
-        """
-
-        if not isinstance(eval, EvaluatorLocal):
-            raise ValueError(
-                "You are trying to store an evaluator that is not locally executed. "
-                "Please use a corresponding local evaluator class."
-            )
+            eval.evaluate_local()
 
         response = self._client.post(eval.get_url(), json=eval.get_request_body())
 

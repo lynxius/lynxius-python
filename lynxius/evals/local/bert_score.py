@@ -17,7 +17,7 @@ class BertScoreLocal(BertScore, EvaluatorLocal):
 
         self.evaluated_results = None
 
-    def evaluate(self):
+    def evaluate_local(self):
         model = OpenAIModel(embedding_model="text-embedding-3-small")
         eval = BertScoreEval(model, self.level, self.presence_threshold)
 

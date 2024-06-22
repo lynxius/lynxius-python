@@ -12,7 +12,7 @@ class ContextPrecisionLocal(ContextPrecision, EvaluatorLocal):
 
         self.evaluated_results = None
 
-    def evaluate(self):
+    def evaluate_local(self):
         model = OpenAIModel(response_format="json_object")
         eval = ContextPrecisionEval(
             model,
