@@ -31,7 +31,7 @@ class JsonDiffLocal(JsonDiff, EvaluatorLocal):
     def get_request_body(self):
         if self.evaluated_results is None:
             raise Exception(
-                "Call evaluator.evaluate() first and then store the evaluator output"
+                "Call evaluator.evaluate_local() first and then store the evaluator output"
             )
 
         body = {
