@@ -42,7 +42,7 @@ class AnswerCorrectness(Evaluator):
     def get_request_body(self):
         if self.run_local and self.evaluated_results is None:
             raise Exception(
-                "Call evaluator.evaluate_local() first and then store the evaluator output"
+                "Call evaluate_local() before storing the local evaluation output"
             )
 
         if self.run_local:

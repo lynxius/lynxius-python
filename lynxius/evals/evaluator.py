@@ -14,6 +14,10 @@ class Evaluator(ABC):
     def get_request_body(self):
         return NotImplemented
 
+    @abstractmethod
+    def evaluate_local(self):
+        return NotImplemented
+
     def validate_tag(value):
         if "," in value or " " in value:
             raise ValueError(f"Tags can't contain spaces or commas: {value}")
