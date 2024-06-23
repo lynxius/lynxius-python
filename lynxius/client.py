@@ -5,9 +5,8 @@ from urllib.parse import urljoin
 
 import httpx
 
-from lynxius.evals.evaluator import Evaluator
-from lynxius.evals.local.evaluator_local import EvaluatorLocal
 from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
+from lynxius.evals.evaluator import Evaluator
 
 
 class LynxiusClient:
@@ -22,6 +21,7 @@ class LynxiusClient:
         self,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
+        run_local: bool | None = False,
     ) -> None:
         """Construct a new synchronous lynxius client instance.
 
@@ -49,6 +49,9 @@ class LynxiusClient:
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
 
+        # Determines if evals are run locally or remotely
+        self.run_local = run_local
+
         self._client = httpx.Client(
             base_url=base_url,
             headers=headers,
@@ -61,7 +64,7 @@ class LynxiusClient:
         """
 
         # Local evaluation
-        if isinstance(eval, EvaluatorLocal):
+        if self.run_local:
             eval.evaluate_local()
 
         response = self._client.post(eval.get_url(), json=eval.get_request_body())
