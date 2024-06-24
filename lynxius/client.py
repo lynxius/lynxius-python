@@ -5,9 +5,8 @@ from urllib.parse import urljoin
 
 import httpx
 
-from lynxius.evals.evaluator import Evaluator
-from lynxius.evals.local.evaluator_local import EvaluatorLocal
 from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
+from lynxius.evals.evaluator import Evaluator
 
 
 class LynxiusClient:
@@ -22,6 +21,7 @@ class LynxiusClient:
         self,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
+        run_local: bool | None = False,
     ) -> None:
         """Construct a new synchronous lynxius client instance.
 
@@ -49,6 +49,9 @@ class LynxiusClient:
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
 
+        # Determines if evals are run locally or remotely
+        self.run_local = run_local
+
         self._client = httpx.Client(
             base_url=base_url,
             headers=headers,
@@ -60,33 +63,14 @@ class LynxiusClient:
         Initiates a batched evaluation job. Returns an eval run ID.
         """
 
-        if isinstance(eval, EvaluatorLocal):
-            raise ValueError(
-                "You are trying to run a remote evaluation with a locally executed "
-                "evaluator. Please use a corresponding remote evaluator class."
-            )
+        # Local evaluation
+        if self.run_local:
+            eval.evaluate_local()
 
-        response = self._client.post(eval.get_url(), json=eval.get_request_body())
-
-        if response.status_code == httpx.codes.CREATED:
-            return response.json()["uuid"]
-        else:
-            print("Error:", response.status_code, response.text)
-            return None
-
-    def store(self, eval: EvaluatorLocal) -> str | None:
-        """
-        Stores the locally executed evaluator on the Lynxius platform.
-        Returns an eval run ID.
-        """
-
-        if not isinstance(eval, EvaluatorLocal):
-            raise ValueError(
-                "You are trying to store an evaluator that is not locally executed. "
-                "Please use a corresponding local evaluator class."
-            )
-
-        response = self._client.post(eval.get_url(), json=eval.get_request_body())
+        response = self._client.post(
+            eval.get_url(run_local=self.run_local),
+            json=eval.get_request_body(run_local=self.run_local),
+        )
 
         if response.status_code == httpx.codes.CREATED:
             return response.json()["uuid"]

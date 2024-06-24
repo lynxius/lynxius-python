@@ -7,11 +7,15 @@ class Evaluator(ABC):
     """
 
     @abstractmethod
-    def get_url(self):
+    def get_url(self, run_local: bool = False):
         return NotImplemented
 
     @abstractmethod
-    def get_request_body(self):
+    def get_request_body(self, run_local: bool = False):
+        return NotImplemented
+
+    @abstractmethod
+    def evaluate_local(self):
         return NotImplemented
 
     def validate_tag(value):
