@@ -15,7 +15,6 @@ class CustomEval(Evaluator):
         name: str = None,
         href: str = None,
         tags: list[str] = [],
-        run_local: bool = False,
     ):
         [Evaluator.validate_tag(value) for value in tags]
 
@@ -28,7 +27,6 @@ class CustomEval(Evaluator):
         self.variables = [
             fname for _, fname, _, _ in Formatter().parse(prompt_template) if fname
         ]
-        self.run_local = run_local
         self.evaluated_results = None
 
     def add_trace(self, values: dict[str, str], context: list[ContextChunk] = []):
@@ -48,18 +46,16 @@ class CustomEval(Evaluator):
 
         self.samples.append((values, context))
 
-    def get_url(self):
-        return (
-            "/evals/store/custom_eval/" if self.run_local else "/evals/run/custom_eval/"
-        )
+    def get_url(self, run_local: bool = False):
+        return "/evals/store/custom_eval/" if run_local else "/evals/run/custom_eval/"
 
-    def get_request_body(self):
-        if self.run_local and self.evaluated_results is None:
+    def get_request_body(self, run_local: bool = False):
+        if run_local and self.evaluated_results is None:
             raise Exception(
                 "Call evaluate_local() before storing the local evaluation output"
             )
 
-        if self.run_local:
+        if run_local:
             body = {
                 "label": self.label,
                 "href": self.href,

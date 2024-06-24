@@ -13,7 +13,6 @@ class ContextPrecision(Evaluator):
         label: str,
         href: str = None,
         tags: list[str] = [],
-        run_local: bool = False,
     ):
         [Evaluator.validate_tag(value) for value in tags]
 
@@ -21,7 +20,6 @@ class ContextPrecision(Evaluator):
         self.href = href
         self.tags = tags
         self.samples = []
-        self.run_local = run_local
         self.evaluated_results = None
 
     def add_trace(self, query: str, reference: str, context: list[ContextChunk] = []):
@@ -30,20 +28,20 @@ class ContextPrecision(Evaluator):
 
         self.samples.append((query, reference, context))
 
-    def get_url(self):
+    def get_url(self, run_local: bool = False):
         return (
             "/evals/store/context_precision_eval/"
-            if self.run_local
+            if run_local
             else "/evals/run/context_precision_eval/"
         )
 
-    def get_request_body(self):
-        if self.run_local and self.evaluated_results is None:
+    def get_request_body(self, run_local: bool = False):
+        if run_local and self.evaluated_results is None:
             raise Exception(
                 "Call evaluate_local() before storing the local evaluation output"
             )
 
-        if self.run_local:
+        if run_local:
             body = {
                 "label": self.label,
                 "href": self.href,

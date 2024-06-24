@@ -67,7 +67,10 @@ class LynxiusClient:
         if self.run_local:
             eval.evaluate_local()
 
-        response = self._client.post(eval.get_url(), json=eval.get_request_body())
+        response = self._client.post(
+            eval.get_url(run_local=self.run_local),
+            json=eval.get_request_body(run_local=self.run_local),
+        )
 
         if response.status_code == httpx.codes.CREATED:
             return response.json()["uuid"]

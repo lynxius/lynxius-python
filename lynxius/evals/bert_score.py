@@ -12,7 +12,6 @@ class BertScore(Evaluator):
         presence_threshold: float = 0.65,
         href: str = None,
         tags: list[str] = [],
-        run_local: bool = False,
     ):
         levels = ["word", "sentence"]
         if level not in levels:
@@ -26,7 +25,6 @@ class BertScore(Evaluator):
         self.level = level
         self.presence_threshold = presence_threshold
         self.samples = []
-        self.run_local = run_local
         self.evaluated_results = None
 
     def add_trace(self, reference: str, output: str, context: list[ContextChunk] = []):
@@ -35,18 +33,16 @@ class BertScore(Evaluator):
 
         self.samples.append((reference, output, context))
 
-    def get_url(self):
-        return (
-            "/evals/store/bert_score/" if self.run_local else "/evals/run/bert_score/"
-        )
+    def get_url(self, run_local: bool = False):
+        return "/evals/store/bert_score/" if run_local else "/evals/run/bert_score/"
 
-    def get_request_body(self):
-        if self.run_local and self.evaluated_results is None:
+    def get_request_body(self, run_local: bool = False):
+        if run_local and self.evaluated_results is None:
             raise Exception(
                 "Call evaluate_local() before storing the local evaluation output"
             )
 
-        if self.run_local:
+        if run_local:
             body = {
                 "label": self.label,
                 "href": self.href,
