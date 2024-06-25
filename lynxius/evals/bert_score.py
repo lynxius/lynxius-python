@@ -12,6 +12,8 @@ class BertScore(Evaluator):
         presence_threshold: float = 0.65,
         href: str = None,
         tags: list[str] = [],
+        baseline_project_uuid: str = None,
+        baseline_eval_run_label: str = None,
     ):
         levels = ["word", "sentence"]
         if level not in levels:
@@ -22,6 +24,8 @@ class BertScore(Evaluator):
         self.label = label
         self.href = href
         self.tags = tags
+        self.baseline_project_uuid = baseline_project_uuid
+        self.baseline_eval_run_label = baseline_eval_run_label
         self.level = level
         self.presence_threshold = presence_threshold
         self.samples = []
@@ -47,6 +51,8 @@ class BertScore(Evaluator):
                 "label": self.label,
                 "href": self.href,
                 "tags": self.tags,
+                "baseline_project_uuid": self.baseline_project_uuid,
+                "baseline_eval_run_label": self.baseline_eval_run_label,
                 "level": self.level,
                 "presence_threshold": self.presence_threshold,
                 "version": "1",
@@ -68,6 +74,8 @@ class BertScore(Evaluator):
                 "label": self.label,
                 "href": self.href,
                 "tags": self.tags,
+                "baseline_project_uuid": self.baseline_project_uuid,
+                "baseline_eval_run_label": self.baseline_eval_run_label,
                 "level": self.level,
                 "presence_threshold": self.presence_threshold,
                 "data": [
