@@ -44,7 +44,7 @@ class OpenAIModel(EvalModel):
         #     {"role": "system", "content": "You are a responsible LLM evaluator ..."}
         # )
 
-        if type(prompt) is str:
+        if isinstance(prompt, str):
             messages_processed.append({"role": "user", "content": prompt})
         else:
             messages_processed.append(prompt)

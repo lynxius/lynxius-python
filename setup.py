@@ -9,6 +9,11 @@ with open("README.md") as readme_file:
 
 requirements = [
     "httpx>=0.27.0",
+    "nltk>=3.8.1",
+    "numpy>=2.0.0",
+    "python_Levenshtein>=0.25.1",
+    "tiktoken>=0.7.0",
+    "openai>=1.35.1",
 ]
 
 test_requirements = [
@@ -41,7 +46,9 @@ setup(
     include_package_data=True,
     keywords="lynxius",
     name="lynxius",
-    packages=find_packages(include=["lynxius", "lynxius.*"]),
+    packages=find_packages(
+        include=["lynxius", "lynxius.*", "lynxius_evals", "lynxius_evals.*"]
+    ),
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/lynxius/lynxius-python",
