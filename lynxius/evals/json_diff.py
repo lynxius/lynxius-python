@@ -9,12 +9,16 @@ class JsonDiff(Evaluator):
         label: str,
         href: str = None,
         tags: list[str] = [],
+        baseline_project_uuid: str = None,
+        baseline_eval_run_label: str = None,
     ):
         [Evaluator.validate_tag(value) for value in tags]
 
         self.label = label
         self.href = href
         self.tags = tags
+        self.baseline_project_uuid = baseline_project_uuid
+        self.baseline_eval_run_label = baseline_eval_run_label
         self.samples = []
         self.evaluated_results = None
 
@@ -66,6 +70,8 @@ class JsonDiff(Evaluator):
                 "label": self.label,
                 "href": self.href,
                 "tags": self.tags,
+                "baseline_project_uuid": self.baseline_project_uuid,
+                "baseline_eval_run_label": self.baseline_eval_run_label,
                 "version": "1",
                 "data": [
                     {
@@ -83,6 +89,8 @@ class JsonDiff(Evaluator):
                 "label": self.label,
                 "href": self.href,
                 "tags": self.tags,
+                "baseline_project_uuid": self.baseline_project_uuid,
+                "baseline_eval_run_label": self.baseline_eval_run_label,
                 "data": [
                     {
                         "reference": item[0],
