@@ -52,5 +52,10 @@ class AnswerCorrectnessEval(LLMBasedEval):
         # All seems good, let's compute the score.
         # The following code is heavily inspired by Ragas.
 
-        f1 = len(tp) / (len(tp) + 0.5 * (len(fp) + len(fn)))
+        try:
+            f1 = len(tp) / (len(tp) + 0.5 * (len(fp) + len(fn)))
+        except ZeroDivisionError as e:
+            logger.exception(e)
+            f1 = 0.0
+
         return f1

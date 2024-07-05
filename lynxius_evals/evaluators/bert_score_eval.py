@@ -127,6 +127,7 @@ class BertScoreEval:
                     "reference": data[batch]["reference"],
                     "output": data[batch]["output"],
                     "contexts": data[batch]["contexts"],
+                    "trace_uuid": data[batch]["trace_uuid"],
                     "precision": float(precision),
                     "recall": float(recall),
                     "f1": float(f1),

@@ -26,11 +26,24 @@ class ContextPrecision(Evaluator):
         self.samples = []
         self.evaluated_results = None
 
-    def add_trace(self, query: str, reference: str, context: list[ContextChunk] = []):
+    def add_trace(
+        self,
+        query: str,
+        reference: str,
+        context: list[ContextChunk] = [],
+        trace_uuid: str | None = None,
+    ):
         if not query or not reference:
             raise ValueError("Query and reference output must be provided")
 
-        self.samples.append((query, reference, context))
+        self.samples.append(
+            {
+                "query": query,
+                "reference": reference,
+                "contexts": context,
+                "trace_uuid": trace_uuid,
+            }
+        )
 
     def get_url(self, run_local: bool = False):
         return (
@@ -61,6 +74,7 @@ class ContextPrecision(Evaluator):
                         "llm_output": json.loads(result["llm_output"]),
                         "score": result["score"],
                         "contexts": result["contexts"],
+                        "trace_uuid": result["trace_uuid"],
                     }
                     for result in self.evaluated_results
                 ],
@@ -74,9 +88,10 @@ class ContextPrecision(Evaluator):
                 "baseline_eval_run_label": self.baseline_eval_run_label,
                 "data": [
                     {
-                        "query": item[0],
-                        "reference": item[1],
-                        "contexts": [c.__dict__ for c in item[2]],
+                        "query": item["query"],
+                        "reference": item["reference"],
+                        "contexts": [c.__dict__ for c in item["contexts"]],
+                        "trace_uuid": item["trace_uuid"],
                     }
                     for item in self.samples
                 ],
@@ -95,10 +110,27 @@ class ContextPrecision(Evaluator):
         for sample in self.samples:
             variables.append(
                 {
-                    "query": sample[0],
-                    "reference": sample[1],
-                    "contexts": [c.__dict__ for c in sample[2]],
+                    "query": sample["query"],
+                    "reference": sample["reference"],
+                    "contexts": [c.__dict__ for c in sample["contexts"]],
+                    "trace_uuid": sample["trace_uuid"],
                 }
             )
 
         self.evaluated_results = eval.evaluate(variables)
+
+        super().evaluate_local()
+
+    def get_merge_id(self) -> int:
+        return hash(
+            json.dumps(
+                {
+                    "class": str(self.__class__),
+                    "label": self.label,
+                    "href": self.href,
+                    "tags": self.tags,
+                    "baseline_project_uuid": self.baseline_project_uuid,
+                    "baseline_eval_run_label": self.baseline_eval_run_label,
+                }
+            )
+        )
