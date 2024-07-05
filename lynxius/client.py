@@ -69,7 +69,7 @@ class LynxiusClient:
         """
 
         # Local evaluation
-        if self.run_local and eval.evaluated_results == None:
+        if self.run_local and eval.evaluated_results is None:
             eval.evaluate_local()
 
         return self._upload_eval(eval)
