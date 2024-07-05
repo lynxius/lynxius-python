@@ -69,7 +69,7 @@ class LynxiusClient:
         """
 
         # Local evaluation
-        if self.run_local:
+        if self.run_local and eval.evaluated_results == None:
             eval.evaluate_local()
 
         return self._upload_eval(eval)
@@ -210,7 +210,7 @@ class LynxiusClient:
 
         result = []
         for eval in evals_to_upload:
-            uuid = self._upload_eval(eval)
+            uuid = self.evaluate(eval)
             result.append(uuid)
 
         return result
