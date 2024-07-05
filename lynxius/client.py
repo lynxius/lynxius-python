@@ -1,9 +1,11 @@
 """Main module."""
 
 import os
+import time
 from urllib.parse import urljoin
 
 import httpx
+from httpx import HTTPStatusError, RequestError
 
 from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
 from lynxius.evals.evaluator import Evaluator
@@ -77,6 +79,39 @@ class LynxiusClient:
         else:
             print("Error:", response.status_code, response.text)
             return None
+
+    def get_eval_run(self, eval_run_uuid: str) -> Evaluator | None:
+        """
+        Returns the details of an Eval Run.
+        Retries for up to 30 seconds before failing.
+        """
+        timeout = 30
+        backoff_factor = 1
+        start_time = time.time()
+
+        attempt = 0
+
+        while time.time() - start_time < timeout:
+            attempt += 1
+            try:
+                response = self._client.get(
+                    f"/projects/evals/{eval_run_uuid}/"
+                ).raise_for_status()
+                body = response.json()
+                if body.get("status") == "SUCCESS":
+                    return body
+                else:
+                    print(
+                        f"Attempt {attempt} received status {body.get('status')}. Retrying..."
+                    )
+            except (HTTPStatusError, RequestError) as exc:
+                print(f"Attempt {attempt} failed: {exc}. Retrying...")
+
+            sleep_time = backoff_factor * (2 ** (attempt - 1))
+            time.sleep(sleep_time)
+
+        print(f"All attempts within {timeout} seconds failed.")
+        return None
 
     def get_dataset_details(self, dataset_id: str) -> DatasetDetails:
         response = self._client.get(
