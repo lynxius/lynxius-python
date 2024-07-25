@@ -1,7 +1,0 @@
-notes:
-  chief-complaint: "Chest pain"
-  history: "Patient presents today with symptoms of pain in upper left chest area. Pain started yesterday and became progresively worse."
-  plan:
-    - step: "Novasc 5 mg"
-    - step: "Admit for Observation"
-    - step: "Order X-ray, ECG"
