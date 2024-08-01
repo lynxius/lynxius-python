@@ -1,0 +1,219 @@
+test_cases:
+  # Success cases (expected output 1.0)
+  - input:
+      query: "What is the capital of France?"
+      reference: "The capital of France is Paris."
+      contexts:
+        - document: "Paris is the capital of France."
+          relevance: 1.0
+        - document: "France is a country in Europe."
+          relevance: 0.5
+        - document: "Berlin is the capital of Germany."
+          relevance: -1.0
+    expected_output: 1.0
+
+  - input:
+      query: "Who wrote 'To Kill a Mockingbird'?"
+      reference: "'To Kill a Mockingbird' was written by Harper Lee."
+      contexts:
+        - document: "Harper Lee is the author of 'To Kill a Mockingbird'."
+          relevance: 1.0
+        - document: "'To Kill a Mockingbird' is a novel."
+          relevance: 0.5
+        - document: "Ernest Hemingway wrote 'The Old Man and the Sea'."
+          relevance: -1.0
+    expected_output: 1.0
+
+  - input:
+      query: "What is the largest planet in our solar system?"
+      reference: "Jupiter is the largest planet in our solar system."
+      contexts:
+        - document: "Jupiter is the largest planet."
+          relevance: 1.0
+        - document: "The solar system includes planets like Earth and Mars."
+          relevance: 0.5
+        - document: "The Moon is a natural satellite of Earth."
+          relevance: -1.0
+    expected_output: 1.0
+
+  - input:
+      query: "What is the boiling point of water?"
+      reference: "The boiling point of water is 100 degrees Celsius."
+      contexts:
+        - document: "Water boils at 100 degrees Celsius."
+          relevance: 1.0
+        - document: "The freezing point of water is 0 degrees Celsius."
+          relevance: 0.5
+        - document: "Water is a liquid."
+          relevance: -1.0
+    expected_output: 1.0
+
+  - input:
+      query: "Who is the president of the United States in 2024?"
+      reference: "The president of the United States in 2024 is Joe Biden."
+      contexts:
+        - document: "Joe Biden is the current president."
+          relevance: 1.0
+        - document: "The United States has a president."
+          relevance: 0.5
+        - document: "Barack Obama was a former president."
+          relevance: -1.0
+    expected_output: 1.0
+
+  - input:
+      query: "What is the speed of light?"
+      reference: "The speed of light is approximately 299,792 kilometers per second."
+      contexts:
+        - document: "Light travels at about 299,792 km/s."
+          relevance: 1.0
+        - document: "Sound travels much slower than light."
+          relevance: 0.5
+        - document: "Light is a form of electromagnetic radiation."
+          relevance: -1.0
+    expected_output: 1.0
+
+  # Failure cases (expected output 0.0)
+  - input:
+      query: "What is the capital of France?"
+      reference: "The capital of France is Paris."
+      contexts:
+        - document: "Tokyo is the capital of Japan."
+          relevance: -1.0
+        - document: "Japan is an island nation in Asia."
+          relevance: -1.0
+        - document: "The Great Wall of China is a historical landmark."
+          relevance: -1.0
+    expected_output: 0.0
+
+  - input:
+      query: "Who discovered America?"
+      reference: "Christopher Columbus discovered America in 1492."
+      contexts:
+        - document: "America was discovered in 1492."
+          relevance: -1.0
+        - document: "Christopher Columbus was an explorer."
+          relevance: -1.0
+        - document: "The first moon landing was in 1969."
+          relevance: -1.0
+    expected_output: 0.0
+
+  - input:
+      query: "What is the primary ingredient in sushi?"
+      reference: "The primary ingredient in sushi is vinegared rice."
+      contexts:
+        - document: "Sushi often contains fish."
+          relevance: -1.0
+        - document: "Sushi is a Japanese dish."
+          relevance: -1.0
+        - document: "Sushi can be vegetarian."
+          relevance: -1.0
+    expected_output: 0.0
+
+  - input:
+      query: "What is the chemical symbol for gold?"
+      reference: "The chemical symbol for gold is Au."
+      contexts:
+        - document: "Gold is a precious metal."
+          relevance: -1.0
+        - document: "The chemical symbol for hydrogen is H."
+          relevance: -1.0
+        - document: "Gold has been used in jewelry for centuries."
+          relevance: -1.0
+    expected_output: 0.0
+
+  - input:
+      query: "What is the tallest mountain in the world?"
+      reference: "The tallest mountain in the world is Mount Everest."
+      contexts:
+        - document: "Mount Everest is located in the Himalayas."
+          relevance: -1.0
+        - document: "K2 is the second tallest mountain."
+          relevance: -1.0
+        - document: "The Andes are a mountain range in South America."
+          relevance: -1.0
+    expected_output: 0.0
+
+  - input:
+      query: "What is the largest ocean on Earth?"
+      reference: "The largest ocean on Earth is the Pacific Ocean."
+      contexts:
+        - document: "The Pacific Ocean is the largest ocean."
+          relevance: -1.0
+        - document: "The Atlantic Ocean is smaller than the Pacific."
+          relevance: -1.0
+        - document: "The Indian Ocean is located south of Asia."
+          relevance: -1.0
+    expected_output: 0.0
+
+  # Partial success cases (expected output 0.5)
+  - input:
+      query: "What is the primary language spoken in Spain?"
+      reference: "The primary language spoken in Spain is Spanish."
+      contexts:
+        - document: "Spanish is the primary language in Spain."
+          relevance: 1.0
+        - document: "Spain is a country in Europe."
+          relevance: 0.5
+        - document: "The capital of Spain is Madrid."
+          relevance: 0.0
+    expected_output: 0.5
+
+  - input:
+      query: "What is the chemical formula for water?"
+      reference: "The chemical formula for water is H2O."
+      contexts:
+        - document: "Water has a chemical formula of H2O."
+          relevance: 1.0
+        - document: "Water is essential for life."
+          relevance: 0.5
+        - document: "Water covers 71% of the Earth's surface."
+          relevance: 0.0
+    expected_output: 0.5
+
+  - input:
+      query: "Who painted the Mona Lisa?"
+      reference: "The Mona Lisa was painted by Leonardo da Vinci."
+      contexts:
+        - document: "Leonardo da Vinci was an Italian artist."
+          relevance: 1.0
+        - document: "The Mona Lisa is displayed in the Louvre Museum."
+          relevance: 0.5
+        - document: "The Mona Lisa is a famous painting."
+          relevance: 0.0
+    expected_output: 0.5
+
+  - input:
+      query: "What is the main ingredient in chocolate?"
+      reference: "The main ingredient in chocolate is cocoa."
+      contexts:
+        - document: "Chocolate is made from cocoa beans."
+          relevance: 1.0
+        - document: "Milk chocolate contains milk."
+          relevance: 0.5
+        - document: "Dark chocolate has a higher cocoa content."
+          relevance: 0.0
+    expected_output: 0.5
+
+  - input:
+      query: "What is the process by which plants make their food?"
+      reference: "The process by which plants make their food is photosynthesis."
+      contexts:
+        - document: "Photosynthesis occurs in the chloroplasts of plant cells."
+          relevance: 1.0
+        - document: "Plants use sunlight to make food through photosynthesis."
+          relevance: 0.5
+        - document: "Plants release oxygen during photosynthesis."
+          relevance: 0.0
+    expected_output: 0.5
+
+  - input:
+      query: "What gas do humans exhale?"
+      reference: "Humans exhale carbon dioxide."
+      contexts:
+        - document: "Humans breathe in oxygen and exhale carbon dioxide."
+          relevance: 1.0
+        - document: "Carbon dioxide is a waste product of respiration."
+          relevance: 0.5
+        - document: "Plants absorb carbon dioxide during photosynthesis."
+          relevance: 0.0
+    expected_output: 0.5
