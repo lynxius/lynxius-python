@@ -90,7 +90,7 @@ class TestAnswerCorrectness:
         assert abs(expected_percentile_20 - p20) <= THRESHOLD
         assert abs(expected_percentile_90 - p90) <= THRESHOLD
 
-    def test_evaluate_success(self, run_eval):
+    def test_evaluate_high_score(self, run_eval):
         entry = self.yaml_data[0]
         expected_score = float(entry["score"])
 
@@ -98,7 +98,7 @@ class TestAnswerCorrectness:
 
         assert abs(score - expected_score) <= THRESHOLD
 
-    def test_evaluate_failure(self, run_eval):
+    def test_evaluate_low_score(self, run_eval):
         entry = self.yaml_data[1]
         expected_score = float(entry["score"])
 
@@ -106,7 +106,7 @@ class TestAnswerCorrectness:
 
         assert abs(score - expected_score) <= THRESHOLD
 
-    def test_evaluate_half_right(self, run_eval):
+    def test_evaluate_medium_score(self, run_eval):
         entry = self.yaml_data[2]
         expected_score = float(entry["score"])
 
