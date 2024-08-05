@@ -1,15 +1,15 @@
-- input: "On what date was the Declaration of Independence officially signed? Keep it short."
+- query: "On what date was the Declaration of Independence officially signed? Keep it short."
   reference: "The Declaration of Independence was signed on August 2, 1776."
   output: "The Declaration of Independence was signed on August 2, 1776."
   comments: "answered by gpt4o"
   score: 1.0
-- input: "What personality do Libras have? Keep it short."
+- query: "What personality do Libras have? Keep it short."
   reference: "Astrological signs are not correlated with personality traits."
   output: |
     Libras are known for being charming, diplomatic, and social. They value balance, harmony, and fairness, often striving to create peaceful environments. Libras are also indecisive and can be people-pleasers, but their natural charm and ability to see multiple perspectives make them excellent mediators.
   comments: "answered by gpt4o"
   score: 0.0
-- input: "Where did fortune cookies originate? Keep it short."
+- query: "Where did fortune cookies originate? Keep it short."
   reference: "The exact origin of fortune cookies is unclear, though various immigrant groups in California claim to have popularized them in the early 20th century. They most likely originated from cookies made by Japanese immigrants to the United States in the late 19th or early 20th century."
   output: "Fortune cookies originated in the United States likely in California during the early 20th century. They were inspired by Japanese senbei crackers and popularized by Chinese-American restaurants."
   comments: "answered by gpt4o, reference was added manually from wikipedia by me"
