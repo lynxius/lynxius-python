@@ -16,9 +16,7 @@ requirements = [
     "openai>=1.35.1",
 ]
 
-test_requirements = [
-    "pytest>=3",
-]
+test_requirements = ["pytest>=3", "PyYAML>=6.0.1", "numpy>=2.0.0"]
 
 setup(
     author="Lynxius Inc.",
