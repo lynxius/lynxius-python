@@ -1,25 +1,21 @@
 import os
+
+import numpy as np
 import pytest
 import yaml
-import lynxius
-import numpy as np
 
 from lynxius.client import LynxiusClient
 from lynxius.evals.answer_correctness import AnswerCorrectness
 
-os.environ['LYNXIUS_API_KEY'] = 'nsAqR0hp7POahcIZYNL4c0g7ytonozWllE3102IeMEzauOlS'
-
-api_key = os.getenv('LYNXIUS_API_KEY')
-
-client = LynxiusClient(api_key=api_key)
-
+THRESHOLD = 0.1
 scores = []
+api_key = os.getenv("LYNXIUS_API_KEY")
+
 
 @pytest.fixture(scope="class")
 def yaml_data(request):
     relative_path = os.path.join(
         os.path.dirname(__file__),
-        
         "answer_correctness_data.yaml",
     )
     TEST_FILE_PATH = os.path.normpath(relative_path)
@@ -35,77 +31,85 @@ def yaml_data(request):
     yield
 
 
-@pytest.fixture
-def init_model():
-    label = "iter_1"
-    tags = ["answer_correctness"]
-    return AnswerCorrectness(label=label, tags=tags)
+def calculate_statistics(scores):
+    # Calculate average
+    average_score = np.mean(scores)
 
-def calculate_percentiles(scores, percentile):
-    return np.percentile(scores, percentile)
+    # Calculate 20th and 90th percentiles
+    percentile_20 = np.percentile(scores, 20, method="inverted_cdf")
+    percentile_90 = np.percentile(scores, 90, method="inverted_cdf")
+
+    return average_score, percentile_20, percentile_90
 
 
 @pytest.mark.usefixtures("yaml_data")
 class TestAnswerCorrectness:
     """Test `AnswerCorrectness` evaluator."""
 
-    @pytest.fixture
-    def init_eval(self, init_model):
-        return init_model
+    @pytest.fixture(scope="class")
+    def init_client(self):
+        return LynxiusClient(api_key=api_key)
 
-    def test_init(self, init_eval):
-        assert init_eval.label == "iter_1"
-        assert "answer_correctness" in init_eval.tags
+    @pytest.fixture(scope="class")
+    def run_eval(self, init_client):
+        label = "unit_test"
+        tags = ["answer_correctness"]
+        eval = AnswerCorrectness(label=label, tags=tags)
 
-    def test_evaluate_success(self, init_eval):
+        for entry in self.yaml_data:
+            eval.add_trace(
+                query=entry["query"],
+                reference=entry["reference"],
+                output=entry["output"],
+            )
+
+        answer_correctness_uuid = init_client.evaluate(eval)
+        eval_run = init_client.get_eval_run(answer_correctness_uuid)
+
+        scores.extend([float(entry.get("score")) for entry in eval_run["results"]])
+
+        return eval_run
+
+    def test_init(self, run_eval):
+        assert run_eval["label"] == "unit_test"
+        assert "answer_correctness" in run_eval["tags"]
+
+    def test_statistics(self, run_eval):
+        expected_average_score, expected_percentile_20, expected_percentile_90 = (
+            calculate_statistics(scores)
+        )
+
+        aggregate_score = float(run_eval.get("aggregate_score"))
+        p20 = float(run_eval.get("p20"))
+        p90 = float(run_eval.get("p90"))
+
+        print(expected_average_score, expected_percentile_20, expected_percentile_90)
+        print(aggregate_score, p20, p90)
+
+        assert abs(expected_average_score - aggregate_score) <= THRESHOLD
+        assert abs(expected_percentile_20 - p20) <= THRESHOLD
+        assert abs(expected_percentile_90 - p90) <= THRESHOLD
+
+    def test_evaluate_success(self, run_eval):
         entry = self.yaml_data[0]
         expected_score = float(entry["score"])
-        threshold = 0.1
 
-        init_eval.add_trace(query=entry["input"], reference=entry["reference"], output=entry["output"])
-        answer_correctness_uuid = client.evaluate(init_eval)
-        pr_eval_run = client.get_eval_run(answer_correctness_uuid)
-        score = pr_eval_run.get("aggregate_score")
-        scores.append(score)
+        score = float(run_eval["results"][0].get("score"))
 
-        assert abs(score - expected_score) <= threshold
+        assert abs(score - expected_score) <= THRESHOLD
 
-    def test_evaluate_failure(self, init_eval):
+    def test_evaluate_failure(self, run_eval):
         entry = self.yaml_data[1]
         expected_score = float(entry["score"])
-        threshold = 0.1
 
-        init_eval.add_trace(query=entry["input"], reference=entry["reference"], output=entry["output"])
-        answer_correctness_uuid = client.evaluate(init_eval)
-        pr_eval_run = client.get_eval_run(answer_correctness_uuid)
-        score = pr_eval_run.get("aggregate_score")
-        scores.append(score)
+        score = float(run_eval["results"][1].get("score"))
 
-        assert abs(score - expected_score) <= threshold
+        assert abs(score - expected_score) <= THRESHOLD
 
-    def test_evaluate_half_right(self, init_eval):
+    def test_evaluate_half_right(self, run_eval):
         entry = self.yaml_data[2]
         expected_score = float(entry["score"])
-        threshold = 0.1
 
-        init_eval.add_trace(query=entry["input"], reference=entry["reference"], output=entry["output"])
-        answer_correctness_uuid = client.evaluate(init_eval)
-        pr_eval_run = client.get_eval_run(answer_correctness_uuid)
-        score = pr_eval_run.get("aggregate_score")
-        scores.append(score)
+        score = float(run_eval["results"][2].get("score"))
 
-        assert abs(score - expected_score) <= threshold
-
-    def test_percentiles(self, init_eval):
-
-        p20 = calculate_percentiles(scores, 20)
-        p90 = calculate_percentiles(scores, 90)
-
-       
-        expected_p20 = 0.2  
-        expected_p90 = 0.9  
-
-        threshold = 0.05 
-
-        assert abs(p20 - expected_p20) <= threshold
-        assert abs(p90 - expected_p90) <= threshold
+        assert abs(score - expected_score) <= THRESHOLD
