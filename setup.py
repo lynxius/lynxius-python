@@ -51,6 +51,9 @@ setup(
     ),
     test_suite="tests",
     tests_require=test_requirements,
+    extras_require={
+        "test": test_requirements,
+    },
     url="https://github.com/lynxius/lynxius-python",
     version="1.2.0",
     zip_safe=False,
