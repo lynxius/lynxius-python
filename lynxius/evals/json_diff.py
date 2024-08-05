@@ -1,3 +1,4 @@
+import json
 from lynxius.evals.evaluator import Evaluator
 from lynxius.rag.types import ContextChunk
 from lynxius_evals.evaluators.json_diff_evaluator import JsonDiffEval
@@ -28,6 +29,7 @@ class JsonDiff(Evaluator):
         output: dict,
         weights: dict = {},
         context: list[ContextChunk] = [],
+        trace_uuid: str | None = None,
     ):
         if not reference or not output:
             raise ValueError("Both reference and output must be provided")
@@ -50,7 +52,15 @@ class JsonDiff(Evaluator):
 
             traverse(weights)
 
-        self.samples.append((reference, output, weights, context))
+        self.samples.append(
+            {
+                "reference": reference,
+                "output": output,
+                "weights": weights,
+                "contexts": context,
+                "trace_uuid": trace_uuid,
+            }
+        )
 
     def get_url(self, run_local: bool = False):
         return (
@@ -80,6 +90,7 @@ class JsonDiff(Evaluator):
                         "weights": result["weights"],
                         "contexts": [c.__dict__ for c in result["contexts"]],
                         "score": result["score"],
+                        "trace_uuid": result["trace_uuid"],
                     }
                     for result in self.evaluated_results
                 ],
@@ -93,10 +104,11 @@ class JsonDiff(Evaluator):
                 "baseline_eval_run_label": self.baseline_eval_run_label,
                 "data": [
                     {
-                        "reference": item[0],
-                        "output": item[1],
-                        "weights": item[2],
-                        "contexts": [c.__dict__ for c in item[3]],
+                        "reference": item["reference"],
+                        "output": item["output"],
+                        "weights": item["weights"],
+                        "contexts": [c.__dict__ for c in item["contexts"]],
+                        "trace_uuid": item["trace_uuid"],
                     }
                     for item in self.samples
                 ],
@@ -111,11 +123,28 @@ class JsonDiff(Evaluator):
         for sample in self.samples:
             variables.append(
                 {
-                    "reference": sample[0],
-                    "output": sample[1],
-                    "weights": sample[2],
-                    "contexts": sample[3],
+                    "reference": sample["reference"],
+                    "output": sample["output"],
+                    "weights": sample["weights"],
+                    "contexts": sample["contexts"],
+                    "trace_uuid": sample["trace_uuid"],
                 }
             )
 
         self.evaluated_results = eval.evaluate(variables)
+
+        super().evaluate_local()
+
+    def get_merge_id(self) -> int:
+        return hash(
+            json.dumps(
+                {
+                    "class": str(self.__class__),
+                    "label": self.label,
+                    "href": self.href,
+                    "tags": self.tags,
+                    "baseline_project_uuid": self.baseline_project_uuid,
+                    "baseline_eval_run_label": self.baseline_eval_run_label,
+                }
+            )
+        )

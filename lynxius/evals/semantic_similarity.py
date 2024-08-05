@@ -1,3 +1,4 @@
+import json
 from lynxius.evals.evaluator import Evaluator
 from lynxius.rag.types import ContextChunk
 from lynxius_evals.evaluators.semantic_similarity_eval import SemanticSimilarityEval
@@ -21,13 +22,25 @@ class SemanticSimilarity(Evaluator):
         self.baseline_project_uuid = baseline_project_uuid
         self.baseline_eval_run_label = baseline_eval_run_label
         self.samples = []
-        self.evaluated_results = None
 
-    def add_trace(self, reference: str, output: str, context: list[ContextChunk] = []):
+    def add_trace(
+        self,
+        reference: str,
+        output: str,
+        context: list[ContextChunk] = [],
+        trace_uuid: str | None = None,
+    ):
         if not reference or not output:
             raise ValueError("Both reference and output must be provided")
 
-        self.samples.append((reference, output, context))
+        self.samples.append(
+            {
+                "reference": reference,
+                "output": output,
+                "contexts": context,
+                "trace_uuid": trace_uuid,
+            }
+        )
 
     def get_url(self, run_local: bool = False):
         return (
@@ -56,6 +69,7 @@ class SemanticSimilarity(Evaluator):
                         "output": result["output"],
                         "similarity": result["similarity"],
                         "contexts": [c.__dict__ for c in result["contexts"]],
+                        "trace_uuid": result["trace_uuid"],
                     }
                     for result in self.evaluated_results
                 ],
@@ -69,9 +83,10 @@ class SemanticSimilarity(Evaluator):
                 "baseline_eval_run_label": self.baseline_eval_run_label,
                 "data": [
                     {
-                        "reference": item[0],
-                        "output": item[1],
-                        "contexts": [c.__dict__ for c in item[2]],
+                        "reference": item["reference"],
+                        "output": item["output"],
+                        "contexts": [c.__dict__ for c in item["contexts"]],
+                        "trace_uuid": item["trace_uuid"],
                     }
                     for item in self.samples
                 ],
@@ -87,10 +102,27 @@ class SemanticSimilarity(Evaluator):
         for sample in self.samples:
             variables.append(
                 {
-                    "reference": sample[0],
-                    "output": sample[1],
-                    "contexts": sample[2],
+                    "reference": sample["reference"],
+                    "output": sample["output"],
+                    "contexts": sample["contexts"],
+                    "trace_uuid": sample["trace_uuid"],
                 }
             )
 
         self.evaluated_results = eval.evaluate(variables)
+
+        super().evaluate_local()
+
+    def get_merge_id(self) -> int:
+        return hash(
+            json.dumps(
+                {
+                    "class": str(self.__class__),
+                    "label": self.label,
+                    "href": self.href,
+                    "tags": self.tags,
+                    "baseline_project_uuid": self.baseline_project_uuid,
+                    "baseline_eval_run_label": self.baseline_eval_run_label,
+                }
+            )
+        )
