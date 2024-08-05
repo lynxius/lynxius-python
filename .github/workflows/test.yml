@@ -24,6 +24,7 @@ jobs:
           pip install pytest
           pip install pyyaml
           pip install numpy
+          pip install httpx
 
       - name: Set LYNXIUS_API_KEY environment variable
         env:
