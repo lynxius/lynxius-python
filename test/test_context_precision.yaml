@@ -1,0 +1,39 @@
+test_cases:
+  # Success cases (expected output 1.0)
+  - input:
+      query: "What is the capital of France?"
+      reference: "The capital of France is Paris."
+      contexts:
+        - document: "Paris is the capital of France."
+          relevance: 1.0
+        - document: "France is a country in Europe."
+          relevance: 0.5
+        - document: "Berlin is the capital of Germany."
+          relevance: -1.0
+    expected_output: 1.0
+
+  # Failure cases (expected output 0.0)
+  - input:
+      query: "What is the capital of France?"
+      reference: "The capital of France is Paris."
+      contexts:
+        - document: "Tokyo is the capital of Japan."
+          relevance: -1.0
+        - document: "Japan is an island nation in Asia."
+          relevance: -1.0
+        - document: "The Great Wall of China is a historical landmark."
+          relevance: -1.0
+    expected_output: 0.0
+
+  # Partial success cases (expected output 0.5)
+  - input:
+      query: "What is the primary language spoken in Spain?"
+      reference: "The primary language spoken in Spain is Spanish."
+      contexts:
+        - document: "Spanish is the primary language in Spain."
+          relevance: 1.0
+        - document: "Spain is a country in Europe."
+          relevance: 0.5
+        - document: "The capital of Spain is Madrid."
+          relevance: 0.0
+    expected_output: 0.5
