@@ -38,7 +38,7 @@ Leave an empty line to separate each import group.
 
 ## Lint And Format Your Code
 
-We reccomand setting up `flake8` and `black` to style your Python code.
+We reccomend setting up `flake8` and `black` to style your Python code.
 
 ### Setup Flake8 And Black on VSCode
 
