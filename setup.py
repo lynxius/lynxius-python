@@ -16,9 +16,7 @@ requirements = [
     "openai>=1.35.1",
 ]
 
-test_requirements = [
-    "pytest>=3",
-]
+test_requirements = ["pytest>=3", "PyYAML>=6.0.1", "numpy>=2.0.0"]
 
 setup(
     author="Lynxius Inc.",
@@ -51,6 +49,9 @@ setup(
     ),
     test_suite="tests",
     tests_require=test_requirements,
+    extras_require={
+        "test": test_requirements,
+    },
     url="https://github.com/lynxius/lynxius-python",
     version="1.2.0",
     zip_safe=False,
