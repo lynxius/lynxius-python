@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 import pytest
 import yaml
@@ -53,14 +54,16 @@ class TestSemanticSimilarity:
         tags = ["semantic_similarity"]
         eval = SemanticSimilarity(label=label, tags=tags)
 
-        for entry in self.yaml_data['test_cases']:
+        for entry in self.yaml_data["test_cases"]:
             eval.add_trace(
                 reference=entry["input"]["reference"],
                 output=entry["input"]["output"],
             )
 
         semantic_similarity_uuid = init_client.evaluate(eval)
-        assert semantic_similarity_uuid is not None, "Failed to get a valid UUID from evaluate method"
+        assert (
+            semantic_similarity_uuid is not None
+        ), "Failed to get a valid UUID from evaluate method"
 
         eval_run = init_client.get_eval_run(semantic_similarity_uuid)
         assert eval_run is not None, "Failed to retrieve evaluation run"
@@ -96,7 +99,7 @@ class TestSemanticSimilarity:
 
     def test_evaluate_high_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][0]
+        entry = self.yaml_data["test_cases"][0]
         expected_score = float(entry["expected_output"])
 
         similarity = run_eval["results"][0].get("similarity")
@@ -105,7 +108,7 @@ class TestSemanticSimilarity:
 
     def test_evaluate_low_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][1]
+        entry = self.yaml_data["test_cases"][1]
         expected_score = float(entry["expected_output"])
 
         similarity = run_eval["results"][1].get("similarity")
@@ -114,7 +117,7 @@ class TestSemanticSimilarity:
 
     def test_evaluate_medium_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][2]
+        entry = self.yaml_data["test_cases"][2]
         expected_score = float(entry["expected_output"])
 
         similarity = run_eval["results"][2].get("similarity")

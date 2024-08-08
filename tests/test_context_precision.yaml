@@ -26,7 +26,7 @@ test_cases:
     expected_output: 0.0
 
   # Partial success cases (expected output 0.5)
-    - input:
+  - input:
       query: "What is the primary language spoken in Spain?"
       reference: "The primary language spoken in Spain is Spanish."
       contexts:

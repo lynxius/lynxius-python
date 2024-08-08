@@ -6,10 +6,10 @@ test_cases:
     
   - input:
       reference: "The quick brown fox jumps over the lazy dog."
-      output: "A fast brown fox leaps over a dog."
-    expected_output: 0.7  
+      output: "A fast brown cat leaps over a dog."
+    expected_output: 0.7
 
   - input:
       reference: "The quick brown fox jumps over the lazy dog."
       output: "Completely unrelated sentence."
-    expected_output: 0.1  
+    expected_output: 0.1

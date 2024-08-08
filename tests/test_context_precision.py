@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 import pytest
 import yaml
@@ -10,6 +11,7 @@ from lynxius.rag.types import ContextChunk
 THRESHOLD = 0.1
 scores = []
 api_key = os.getenv("LYNXIUS_API_KEY")
+
 
 @pytest.fixture(scope="class")
 def yaml_data(request):
@@ -55,17 +57,22 @@ class TestContextPrecision:
         tags = ["context_precision"]
         eval = ContextPrecision(label=label, tags=tags)
 
-        for entry in self.yaml_data['test_cases']:
-            contexts = [ContextChunk(document=doc["document"], relevance=doc["relevance"]) for doc in entry["input"]["contexts"]]
+        for entry in self.yaml_data["test_cases"]:
+            contexts = [
+                ContextChunk(document=doc["document"], relevance=doc["relevance"])
+                for doc in entry["input"]["contexts"]
+            ]
             eval.add_trace(
                 query=entry["input"]["query"],
                 reference=entry["input"]["reference"],
-                context=contexts
+                context=contexts,
             )
 
         try:
             context_precision_uuid = init_client.evaluate(eval)
-            assert context_precision_uuid is not None, "Failed to get a valid UUID from evaluate method"
+            assert (
+                context_precision_uuid is not None
+            ), "Failed to get a valid UUID from evaluate method"
 
             eval_run = init_client.get_eval_run(context_precision_uuid)
             assert eval_run is not None, "Failed to retrieve evaluation run"
@@ -103,7 +110,7 @@ class TestContextPrecision:
 
     def test_evaluate_high_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][0]
+        entry = self.yaml_data["test_cases"][0]
         expected_score = float(entry["expected_output"])
 
         score = run_eval["results"][0].get("score")
@@ -112,7 +119,7 @@ class TestContextPrecision:
 
     def test_evaluate_low_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][1]
+        entry = self.yaml_data["test_cases"][1]
         expected_score = float(entry["expected_output"])
 
         score = run_eval["results"][1].get("score")
@@ -121,7 +128,7 @@ class TestContextPrecision:
 
     def test_evaluate_medium_score(self, run_eval):
         assert run_eval is not None, "Evaluation run should not be None"
-        entry = self.yaml_data['test_cases'][2]
+        entry = self.yaml_data["test_cases"][2]
         expected_score = float(entry["expected_output"])
 
         score = run_eval["results"][2].get("score")
