@@ -1,0 +1,15 @@
+test_cases:
+  - input:
+      reference: "The tomato sauce of Neapolitan pizza must be made with San Marzano tomatoes or pomodorini del Piennolo del Vesuvio."
+      output: "The tomato sauce of Neapolitan pizza must be made with San Marzano tomatoes or pomodorini del Piennolo del Vesuvio."
+    expected_output: 1.0
+    
+  - input:
+      reference: "The tomato sauce of Neapolitan pizza must be made with San Marzano tomatoes or pomodorini del Piennolo del Vesuvio."
+      output: "This sentence is somewhat related to pizza."
+    expected_output: 0.5
+
+  - input:
+      reference: "The tomato sauce of Neapolitan pizza must be made with San Marzano tomatoes or pomodorini del Piennolo del Vesuvio."
+      output: "wow"
+    expected_output: 0.3
