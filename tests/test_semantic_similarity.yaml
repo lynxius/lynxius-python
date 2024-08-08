@@ -1,0 +1,15 @@
+test_cases:
+  - input:
+      reference: "The quick brown fox jumps over the lazy dog."
+      output: "A fast brown fox leaps over a lazy dog."
+    expected_output: 0.9
+    
+  - input:
+      reference: "The quick brown fox jumps over the lazy dog."
+      output: "A fast brown fox leaps over a dog."
+    expected_output: 0.7  
+
+  - input:
+      reference: "The quick brown fox jumps over the lazy dog."
+      output: "Completely unrelated sentence."
+    expected_output: 0.1  
