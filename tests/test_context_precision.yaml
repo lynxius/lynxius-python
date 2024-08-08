@@ -26,14 +26,14 @@ test_cases:
     expected_output: 0.0
 
   # Partial success cases (expected output 0.5)
-  - input:
+    - input:
       query: "What is the primary language spoken in Spain?"
       reference: "The primary language spoken in Spain is Spanish."
       contexts:
-        - document: "Spanish is the primary language in Spain."
-          relevance: 1.0
         - document: "Spain is a country in Europe."
           relevance: 0.5
+        - document: "Spanish is the primary language in Spain."
+          relevance: 1.0
         - document: "The capital of Spain is Madrid."
           relevance: 0.0
     expected_output: 0.5

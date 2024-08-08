@@ -6,7 +6,7 @@ import yaml
 from lynxius.client import LynxiusClient
 from lynxius.evals.semantic_similarity import SemanticSimilarity
 
-THRESHOLD = 0.3  
+THRESHOLD = 0.1
 scores = []
 api_key = os.getenv("LYNXIUS_API_KEY")
 
@@ -33,8 +33,8 @@ def calculate_statistics(scores):
     average_score = np.mean(scores)
 
     # Calculate 20th and 90th percentiles
-    percentile_20 = np.percentile(scores, 20)
-    percentile_90 = np.percentile(scores, 90)
+    percentile_20 = np.percentile(scores, 20, method="inverted_cdf")
+    percentile_90 = np.percentile(scores, 90, method="inverted_cdf")
 
     return average_score, percentile_20, percentile_90
 
@@ -86,9 +86,9 @@ class TestSemanticSimilarity:
         if expected_average_score is None:
             pytest.fail("No valid scores to calculate statistics.")
 
-        aggregate_score = float(run_eval.get("aggregate_score", 0.0))
-        p20 = float(run_eval.get("p20", 0.0))
-        p90 = float(run_eval.get("p90", 0.0))
+        aggregate_score = float(run_eval.get("aggregate_score"))
+        p20 = float(run_eval.get("p20"))
+        p90 = float(run_eval.get("p90"))
 
         assert abs(expected_average_score - aggregate_score) <= THRESHOLD
         assert abs(expected_percentile_20 - p20) <= THRESHOLD
