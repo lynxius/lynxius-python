@@ -1,0 +1,12 @@
+- query: "On what date was the Declaration of Independence officially signed?"
+  reference: "The Declaration of Independence was signed on August 2, 1776."
+  output: "The Declaration of Independence was signed on August 2, 1776."
+  score: 1.0
+- query: "On what date was the Declaration of Independence officially signed?"
+  reference: "The Declaration of Independence was signed on August 2, 1776."
+  output: "The Declaration of Independence was signed on July 4, 1776."
+  score: 0.0
+- query: "Who was the first president of the United States?"
+  reference: "George Washington was the first president of the United States, serving from 1789 to 1797."
+  output: "George Washington was the first president of the United States, serving from 1700 to 1798."
+  score: 0.5
