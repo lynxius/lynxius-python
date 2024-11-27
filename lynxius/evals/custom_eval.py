@@ -1,3 +1,4 @@
+import json
 from string import Formatter
 
 from lynxius.evals.evaluator import Evaluator
@@ -33,7 +34,12 @@ class CustomEval(Evaluator):
         ]
         self.evaluated_results = None
 
-    def add_trace(self, values: dict[str, str], context: list[ContextChunk] = []):
+    def add_trace(
+        self,
+        values: dict[str, str],
+        context: list[ContextChunk] = [],
+        trace_uuid: str | None = None,
+    ):
 
         # Ensure that all variables in the template are provided
         for var_name in self.variables:
@@ -48,7 +54,13 @@ class CustomEval(Evaluator):
                     f"Variable '{var_name}' doesn't appear in the template."
                 )
 
-        self.samples.append((values, context))
+        self.samples.append(
+            {
+                "variables": values,
+                "contexts": context,
+                "trace_uuid": trace_uuid,
+            }
+        )
 
     def get_url(self, run_local: bool = False):
         return "/evals/store/custom_eval/" if run_local else "/evals/run/custom_eval/"
@@ -73,9 +85,10 @@ class CustomEval(Evaluator):
                     {
                         "llm_input": result["llm_input"],
                         "llm_output": result["llm_output"],
-                        "variables": self.samples[i][0],
+                        "variables": self.samples[i]["variables"],
                         "score": str(result["score"]),
                         "contexts": [c.__dict__ for c in result["contexts"]],
+                        "trace_uuid": result["trace_uuid"],
                     }
                     for i, result in enumerate(self.evaluated_results)
                 ],
@@ -90,7 +103,11 @@ class CustomEval(Evaluator):
                 "prompt_template": self.prompt_template,
                 "name_override": self.name_override,
                 "data": [
-                    {"variables": item[0], "contexts": [c.__dict__ for c in item[1]]}
+                    {
+                        "variables": item["variables"],
+                        "contexts": [c.__dict__ for c in item["contexts"]],
+                        "trace_uuid": item["trace_uuid"],
+                    }
                     for item in self.samples
                 ],
             }
@@ -112,6 +129,27 @@ class CustomEval(Evaluator):
         variables = []
         for sample in self.samples:
             # Merge contexts and variables to be formatted in the prompt
-            variables.append(sample[0] | {"contexts": sample[1]})
+            variables.append(
+                sample["variables"]
+                | {"contexts": sample["contexts"], "trace_uuid": sample["trace_uuid"]}
+            )
 
         self.evaluated_results = eval.evaluate(variables)
+
+        super().evaluate_local()
+
+    def get_merge_id(self) -> int:
+        return hash(
+            json.dumps(
+                {
+                    "class": str(self.__class__),
+                    "label": self.label,
+                    "href": self.href,
+                    "tags": self.tags,
+                    "baseline_project_uuid": self.baseline_project_uuid,
+                    "baseline_eval_run_label": self.baseline_eval_run_label,
+                    "name_override": self.name_override,
+                    "prompt_template": self.prompt_template,
+                }
+            )
+        )

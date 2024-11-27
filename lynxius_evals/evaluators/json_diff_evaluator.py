@@ -22,6 +22,7 @@ class JsonDiffEval:
             o2 = item["output"]
             weights = item.get("weights", {})
             contexts = item["contexts"]
+            trace_uuid = item["trace_uuid"]
             score = self.json_diff(o1, o2, weights)
 
             result.append(
@@ -30,6 +31,7 @@ class JsonDiffEval:
                     "output": o2,
                     "weights": weights,
                     "contexts": contexts,
+                    "trace_uuid": trace_uuid,
                     "score": score,
                 }
             )

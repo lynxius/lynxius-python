@@ -33,6 +33,7 @@ class SemanticSimilarityEval:
             reference = variable_values_list[i // 2]["reference"]
             output = variable_values_list[i // 2]["output"]
             contexts = variable_values_list[i // 2]["contexts"]
+            trace_uuid = variable_values_list[i // 2]["trace_uuid"]
             vec1 = np.array(embeddings[i])
             vec2 = np.array(embeddings[i + 1])
 
@@ -58,6 +59,7 @@ class SemanticSimilarityEval:
                     "reference": reference,
                     "output": output,
                     "contexts": contexts,
+                    "trace_uuid": trace_uuid,
                     "similarity": float(cosine_similarity),
                 }
             )

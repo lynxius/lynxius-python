@@ -3,12 +3,15 @@
 import os
 import time
 from urllib.parse import urljoin
+from collections import defaultdict
 
 import httpx
 from httpx import HTTPStatusError, RequestError
+import jsonpickle
 
 from lynxius.datasets.types import Dataset, DatasetDetails, DatasetEntry
 from lynxius.evals.evaluator import Evaluator
+from lynxius.tracing.observe import Trace
 
 
 class LynxiusClient:
@@ -66,9 +69,15 @@ class LynxiusClient:
         """
 
         # Local evaluation
-        if self.run_local:
+        if self.run_local and eval.evaluated_results is None:
             eval.evaluate_local()
 
+        return self._upload_eval(eval)
+
+    def _upload_eval(self, eval: Evaluator) -> str | None:
+        """
+        Stores an eval run on the Lynxius platform. Returns an eval run ID.
+        """
         response = self._client.post(
             eval.get_url(run_local=self.run_local),
             json=eval.get_request_body(run_local=self.run_local),
@@ -101,9 +110,8 @@ class LynxiusClient:
                 if body.get("status") == "SUCCESS":
                     return body
                 else:
-                    print(
-                        f"Attempt {attempt} received status {body.get('status')}. Retrying..."
-                    )
+                    status = body.get("status")
+                    print(f"Attempt {attempt} received status {status}. Retrying...")
             except (HTTPStatusError, RequestError) as exc:
                 print(f"Attempt {attempt} failed: {exc}. Retrying...")
 
@@ -144,3 +152,65 @@ class LynxiusClient:
             dataset_details.entries.append(dataset_entry)
 
         return dataset_details
+
+    def store_traces(self, traces: list[Trace]):
+        """
+        This function merges corresponding evals associated to all traces based on their
+        eval types and produces batched eval runs. It then uploads all traces as well as
+        the eval runs onto the Lynxius online platform.
+        """
+
+        # First, we upload all traces and get their uuids.
+        data = {"traces": [{"entry_span": trace.entry} for trace in traces]}
+        data = jsonpickle.encode(data, unpicklable=False)
+
+        response = self._client.post(
+            "/evals/store/traces/",
+            data=data,
+            headers={"Content-Type": "application/json"},
+        ).raise_for_status()
+        body = response.json()
+
+        # Make sure every trace was recorded
+        assert len(body["traces"]) == len(traces)
+
+        # Assign uuids of traces to their corresponding evals
+        for trace, response in zip(traces, body["traces"]):
+            uuid = response["uuid"]
+            for eval in trace.evals:
+                if eval.samples:
+                    for sample in eval.samples:
+                        sample["trace_uuid"] = uuid
+
+                if eval.evaluated_results:
+                    for result in eval.evaluated_results:
+                        result["trace_uuid"] = uuid
+
+        # Merge evals into a single eval run based on merge ids.
+        merge_id_to_evals = defaultdict(lambda: [])
+        for trace in traces:
+            for eval in trace.evals:
+                merge_id_to_evals[eval.get_merge_id()].append(eval)
+
+        # Merge matching evals
+        evals_to_upload = []
+
+        for _, evals in merge_id_to_evals.items():
+            # We merge all evals into the first one
+            eval = evals[0]
+            if not eval.samples:
+                eval.samples = []
+
+            for other in evals[1:]:
+                if other.samples:
+                    eval.samples += other.samples
+                eval.evaluated_results += other.evaluated_results
+
+            evals_to_upload.append(eval)
+
+        result = []
+        for eval in evals_to_upload:
+            uuid = self.evaluate(eval)
+            result.append(uuid)
+
+        return result
